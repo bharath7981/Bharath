@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: pink;
+        }
+        #startPage, #cakePage, #finalPage {
+            text-align: center;
+        }
+        #cakePage, #finalPage {
+            display: none;
+        }
+        .cake {
+            position: relative;
+            width: 220px;
+            height: 180px;
+        }
+        .bottom-tier {
+            position: absolute;
+            width: 220px;
+            height: 100px;
+            background-color: #ffcc99;
+            border-radius: 20px;
+            border: 5px solid #d2691e;
+            bottom: 0;
+        }
+        .top-tier {
+            position: absolute;
+            width: 140px;
+            height: 80px;
+            background-color: #ffcc99;
+            border-radius: 15px;
+            border: 5px solid #d2691e;
+            left: 50%;
+            transform: translate(-50%, 0);
+            top: 20px;
+        }
+        .icing {
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background-color: white;
+            border-radius: 20px 20px 0 0;
+            top: 0;
+        }
+        .candles {
+            position: absolute;
+            width: 100%;
+            top: -40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .candle {
+            width: 10px;
+            height: 40px;
+            background-color: red;
+            position: relative;
+        }
+        .flame {
+            position: absolute;
+            width: 15px;
+            height: 20px;
+            background-color: orange;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+        }
+        .hidden {
+            display: none;
+        }
+        .cake-piece {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #d2691e;
+            border-radius: 10px;
+            top: 120px;
+            left: 85%;
+            transform: rotate(20deg);
+            display: none;
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+    <div id="startPage">
+        <img src="birthday.jpg" alt="Celebration Image" width="300">
+        <br>
+        <button onclick="showCakePage()">Next</button>
+    </div>
+    <div id="cakePage">
+        <div class="cake" onclick="blowOut()">
+            <div class="bottom-tier">
+                <div class="icing"></div>
+            </div>
+            <div class="top-tier">
+                <div class="icing"></div>
+                <div class="candles">
+                    <div class="candle"><div class="flame" id="flame1"></div></div>
+                    <div class="candle"><div class="flame" id="flame2"></div></div>
+                    <div class="candle"><div class="flame" id="flame3"></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="cake-piece" id="cakePiece"></div>
+        <br>
+        <button onclick="showFinalPage()">Next</button>
+    </div>
+    <div id="finalPage">
+        <img src="image.jpg" alt="Final Surprise Image" width="300">
+    </div>
+    <script>
+        function showCakePage() {
+            document.getElementById("startPage").style.display = "none";
+            document.getElementById("cakePage").style.display = "flex";
+            document.getElementById("cakePage").style.flexDirection = "column";
+            document.getElementById("cakePage").style.alignItems = "center";
+        }function blowOut() {
+        document.getElementById("flame1").classList.add("hidden");
+        document.getElementById("flame2").classList.add("hidden");
+        document.getElementById("flame3").classList.add("hidden");
+        let cakePiece = document.getElementById("cakePiece");
+        cakePiece.style.display = "block";
+        cakePiece.onmousedown = function(event) {
+            event.preventDefault();
+            let shiftX = event.clientX - cakePiece.getBoundingClientRect().left;
+            let shiftY = event.clientY - cakePiece.getBoundingClientRect().top;
+            
+            function moveAt(pageX, pageY) {
+                cakePiece.style.left = pageX - shiftX + 'px';
+                cakePiece.style.top = pageY - shiftY + 'px';
+            }
+            
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+            
+            document.addEventListener('mousemove', onMouseMove);
+            
+            cakePiece.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                cakePiece.onmouseup = null;
+            };
+        };
+        
+        cakePiece.ondragstart = function() {
+            return false;
+        };
+    }
+    
+    function showFinalPage() {
+        document.getElementById("cakePage").style.display = "none";
+        document.getElementById("finalPage").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
